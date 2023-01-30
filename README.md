@@ -21,7 +21,7 @@ Each lab is in different branch
 |------- |---|:-:|
 |[lab 1](https://pdos.csail.mit.edu/6.828/2021/labs/util.html) |xv6 and Unix utilities|🚧|
 |[lab 2](https://pdos.csail.mit.edu/6.828/2021/labs/syscall.html) |system calls|⌛|
-|[lab 3](https://pdos.csail.mit.edu/6.828/2021/labs/pgtbl.html) |page tables⌛|
+|[lab 3](https://pdos.csail.mit.edu/6.828/2021/labs/pgtbl.html) |page tables|⌛|
 |[lab 4](https://pdos.csail.mit.edu/6.828/2021/labs/traps.html) |traps|⌛|
 |[lab 5](https://pdos.csail.mit.edu/6.828/2021/labs/cow.html) |Copy-on-Write Fork for xv6|⌛|
 |[lab 6](https://pdos.csail.mit.edu/6.828/2021/labs/thread.html) |Multithreading|⌛|
