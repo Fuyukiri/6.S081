@@ -61,7 +61,6 @@ sink()
             // Child Process only created when we get a prime number
             // currently, new child still wire to previous child process
             // so read from there, and write to parent process.
-            printf("getpid %d\n", getpid());
             redirect(1, pd);
             cull(p);
         }
