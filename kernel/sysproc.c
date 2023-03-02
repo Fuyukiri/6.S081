@@ -95,3 +95,16 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_trace(void)
+{
+  int trace_value;
+  // use argint to read input parameter from register to memory
+  if (argint(0, &trace_value) < 0)
+  {
+    return -1;
+  }
+  myproc()->trace_value = trace_value;
+  return 0;
+}
