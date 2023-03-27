@@ -673,3 +673,43 @@ procdump(void)
     printf("\n");
   }
 }
+
+int
+pgaccess(uint64 page, int n, uint64 buf)
+{
+  struct proc *p = myproc();
+  if (p == 0) 
+  {
+    return -1;
+  }
+  pagetable_t pagetable = p->pagetable;
+
+  int i;
+  uint64 mask = 0;
+  pte_t *pte;
+
+  // uint64 is 64 bits, so we can only check 64 pages at a time.
+  int MAX_BIT = 64;
+
+  for (i = 0; i < n && i < MAX_BIT; i++) 
+  {
+    pte = walk(pagetable, page + i * PGSIZE, 0);
+
+    // only when PTE_A is set, we need to set bit mask
+    // We don't need to consider too much about PTE_A, because
+    // it is defined in RV64 manual, and we can't change it.
+    // In page 68 Volume II: RISC-V Privileged Architectures V20190608-Priv-MSU-Ratified
+    // Sv32 page table entry is defined in Figure 4.15.
+    if (*pte & PTE_A) 
+    {
+      //bit mask where the first page corresponds to the least significant bit
+      mask |= 1L << i;
+
+      // reset PTE_A to 0
+      *pte ^= PTE_A;
+    }
+  }
+
+  // copy mask to buf
+  return copyout(pagetable, buf, (void *)&mask, sizeof(mask));
+}

@@ -1,0 +1,14 @@
+# 1
+Each user process need one page created for speeding up system call.
+So we need to put the new page just below trapframe
+Read how trapframe works and do the similar thing
+
+# 2
+Use DFS to print the PTE tree
+
+# 3
+only when PTE_A is set, we need to set bit mask
+We don't need to consider too much about PTE_A, because
+it is defined in RV64 manual, and we can't change it.
+In page 68 Volume II: RISC-V Privileged Architectures V20190608-Priv-MSU-Ratified
+Sv32 page table entry is defined in Figure 4.15.
