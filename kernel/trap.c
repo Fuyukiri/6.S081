@@ -78,7 +78,19 @@ usertrap(void)
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2)
+  {
+    if (p->alarminterval > 0) 
+    {
+      if (p->alarmticks == p->alarminterval) 
+      {
+        // trapframe must be saved first since epc is in trapframe
+        *p->alarmframe = *p->trapframe;
+        p->trapframe->epc = p->alarmhandler;
+      }
+      p->alarmticks++;
+    }
     yield();
+  }
 
   usertrapret();
 }
