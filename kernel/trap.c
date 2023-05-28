@@ -13,7 +13,8 @@ extern char trampoline[], uservec[], userret[];
 
 // in kernelvec.S, calls kerneltrap().
 void kernelvec();
-
+int check_alloc_valid(uint64 addr);
+int alloc_mem(pagetable_t pagetable, uint64 addr);
 extern int devintr();
 
 void
@@ -67,6 +68,14 @@ usertrap(void)
     syscall();
   } else if((which_dev = devintr()) != 0){
     // ok
+  } else if(r_scause() == 13 || r_scause() == 15) {
+    uint64 addr = r_stval();
+    addr = PGROUNDDOWN(addr);
+    pagetable_t pagetable = p->pagetable;
+    // Kill a process if it page-faults on a virtual memory address higher than any allocated with sbrk().
+    if (alloc_mem(pagetable, addr) != 0) {
+      p->killed = 1;
+    }
   } else {
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
@@ -82,6 +91,37 @@ usertrap(void)
 
   usertrapret();
 }
+
+// Handle the case in which a process passes a valid address from sbrk() to a system call such as read or write, but the memory for that address has not yet been allocated.
+int check_alloc_valid(uint64 addr) {
+  struct proc *p = myproc();
+  // new allocated memory should be in the range of (p->trapframe->sp, min(MAXVA, p->sz))
+  return addr < p->sz && addr < MAXVA && addr > p->trapframe->sp;
+}
+
+int alloc_mem(pagetable_t pagetable, uint64 addr) {
+  if (check_alloc_valid(addr) != 1) {
+    return -1;
+  }
+  char *mem;
+  struct proc *p = myproc();
+  mem = kalloc();
+  // if kalloc() fails in the page fault handler, kill the current process.
+  if(mem == 0){
+    uvmdealloc(pagetable, addr + PGSIZE, addr);
+    p->killed = 1;
+    return -1;
+  }
+  memset(mem, 0, PGSIZE);
+  if(mappages(pagetable, addr, PGSIZE, (uint64)mem, PTE_W|PTE_X|PTE_R|PTE_U) != 0){
+    kfree(mem);
+    uvmdealloc(pagetable, addr + PGSIZE, addr);
+    p->killed = 1;
+    return -1;
+  }
+  return 0;
+}
+
 
 //
 // return to user space
