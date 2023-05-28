@@ -23,7 +23,7 @@ Each lab is in different branch
 |[lab 2](https://pdos.csail.mit.edu/6.828/2021/labs/syscall.html) |system calls|✅|
 |[lab 3](https://pdos.csail.mit.edu/6.828/2021/labs/pgtbl.html) |page tables|✅|
 |[lab 4](https://pdos.csail.mit.edu/6.828/2021/labs/traps.html) |traps|✅|
-|[lab 5(from 2020)](https://pdos.csail.mit.edu/6.828/2020/labs/lazy.html) |lazy page allocation|⌛|
+|[lab 5(from 2020)](https://pdos.csail.mit.edu/6.828/2020/labs/lazy.html) |lazy page allocation|✅|
 |[lab 6](https://pdos.csail.mit.edu/6.828/2021/labs/cow.html) |Copy-on-Write Fork for xv6|⌛|
 |[lab 7](https://pdos.csail.mit.edu/6.828/2021/labs/thread.html) |Multithreading|⌛|
 |[lab 8](https://pdos.csail.mit.edu/6.828/2021/labs/net.html) |networking|⌛|
